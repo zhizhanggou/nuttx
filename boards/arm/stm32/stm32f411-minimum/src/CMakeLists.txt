@@ -74,7 +74,24 @@ if(CONFIG_ADC_HX711)
   list(APPEND SRCS stm32_hx711.c)
 endif()
 
+list(APPEND SRCS etc_romfs.c)
+
 target_sources(board PRIVATE ${SRCS})
+
+if(CONFIG_ETC_ROMFS)
+  nuttx_add_romfs(
+    NAME
+    etc
+    MOUNTPOINT
+    RCSRCS
+    etc/init.d/rcS
+    etc/init.d/rc.sysinit
+    RCRAWS
+    PATH
+    ${CMAKE_CURRENT_BINARY_DIR}/etc)
+
+  target_link_libraries(board PRIVATE romfs_etc)
+endif()
 
 set_property(GLOBAL PROPERTY LD_SCRIPT
                              "${NUTTX_BOARD_DIR}/scripts/stm32f411ce.ld")
