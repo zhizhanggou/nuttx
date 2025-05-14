@@ -76,6 +76,8 @@ endif()
 
 list(APPEND SRCS etc_romfs.c)
 
+list(APPEND SRCS stm32_icm42688.c)
+
 target_sources(board PRIVATE ${SRCS})
 
 if(CONFIG_ETC_ROMFS)

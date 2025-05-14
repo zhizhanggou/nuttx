@@ -33,15 +33,15 @@
 #include "stm32.h"
 
 #ifdef CONFIG_USERLED
-#  include <nuttx/leds/userled.h>
+#include <nuttx/leds/userled.h>
 #endif
 
 #ifdef CONFIG_INPUT_BUTTONS
-#  include <nuttx/input/buttons.h>
+#include <nuttx/input/buttons.h>
 #endif
 
 #ifdef CONFIG_STM32_OTGFS
-#  include "stm32_usbhost.h"
+#include "stm32_usbhost.h"
 #endif
 
 #include "stm32f411-minimum.h"
@@ -52,24 +52,24 @@
 
 /* Checking needed by W25 Flash */
 
-#define HAVE_W25      1
+#define HAVE_W25 1
 
 /* Can't support the W25 device if it SPI1 or W25 support is not enabled */
 
 #if !defined(CONFIG_STM32_SPI1) || !defined(CONFIG_MTD_W25)
-#  undef HAVE_W25
+#undef HAVE_W25
 #endif
 
 /* Can't support W25 features if mountpoints are disabled */
 
 #ifdef CONFIG_DISABLE_MOUNTPOINT
-#  undef HAVE_W25
+#undef HAVE_W25
 #endif
 
 /* Default W25 minor number */
 
 #if defined(HAVE_W25) && !defined(CONFIG_NSH_W25MINOR)
-#  define CONFIG_NSH_W25MINOR 0
+#define CONFIG_NSH_W25MINOR 0
 #endif
 
 /****************************************************************************
@@ -99,9 +99,9 @@ int stm32_bringup(void)
 
   ret = userled_lower_initialize("/dev/userleds");
   if (ret < 0)
-    {
-      syslog(LOG_ERR, "ERROR: userled_lower_initialize() failed: %d\n", ret);
-    }
+  {
+    syslog(LOG_ERR, "ERROR: userled_lower_initialize() failed: %d\n", ret);
+  }
 #endif
 
 #ifdef CONFIG_INPUT_BUTTONS
@@ -109,9 +109,9 @@ int stm32_bringup(void)
 
   ret = btn_lower_initialize("/dev/buttons");
   if (ret < 0)
-    {
-      syslog(LOG_ERR, "ERROR: btn_lower_initialize() failed: %d\n", ret);
-    }
+  {
+    syslog(LOG_ERR, "ERROR: btn_lower_initialize() failed: %d\n", ret);
+  }
 #endif
 
 #ifdef CONFIG_PWM
@@ -119,9 +119,9 @@ int stm32_bringup(void)
 
   ret = stm32_pwm_setup();
   if (ret < 0)
-    {
-      syslog(LOG_ERR, "ERROR: stm32_pwm_setup() failed: %d\n", ret);
-    }
+  {
+    syslog(LOG_ERR, "ERROR: stm32_pwm_setup() failed: %d\n", ret);
+  }
 #endif
 
 #ifdef CONFIG_RGBLED
@@ -129,25 +129,25 @@ int stm32_bringup(void)
 
   ret = stm32_rgbled_setup();
   if (ret < 0)
-    {
-      syslog(LOG_ERR, "ERROR: stm32_rgbled_setup() failed: %d\n", ret);
-    }
+  {
+    syslog(LOG_ERR, "ERROR: stm32_rgbled_setup() failed: %d\n", ret);
+  }
 #endif
 
 #ifdef CONFIG_STM32F411MINIMUM_GPIO
   ret = stm32_gpio_initialize();
   if (ret != OK)
-    {
-      gerr("ERROR: Failed to initialize gpio: %d\n", ret);
-    }
+  {
+    gerr("ERROR: Failed to initialize gpio: %d\n", ret);
+  }
 #endif
 
 #ifdef CONFIG_ADC_HX711
   ret = stm32_hx711_initialize();
   if (ret != OK)
-    {
-      aerr("ERROR: Failed to initialize hx711: %d\n", ret);
-    }
+  {
+    aerr("ERROR: Failed to initialize hx711: %d\n", ret);
+  }
 #endif
 
 #if defined(CONFIG_STM32_OTGFS) && defined(CONFIG_USBHOST)
@@ -157,10 +157,10 @@ int stm32_bringup(void)
 
   ret = stm32_usbhost_initialize();
   if (ret != OK)
-    {
-      uerr("ERROR: Failed to initialize USB host: %d\n", ret);
-      return ret;
-    }
+  {
+    uerr("ERROR: Failed to initialize USB host: %d\n", ret);
+    return ret;
+  }
 #endif
 
 #ifdef HAVE_W25
@@ -168,11 +168,11 @@ int stm32_bringup(void)
 
   ret = stm32_w25initialize(CONFIG_NSH_W25MINOR);
   if (ret < 0)
-    {
-      syslog(LOG_ERR, "ERROR: Failed to initialize W25 minor %d: %d\n",
-             CONFIG_NSH_W25MINOR, ret);
-      return ret;
-    }
+  {
+    syslog(LOG_ERR, "ERROR: Failed to initialize W25 minor %d: %d\n",
+           CONFIG_NSH_W25MINOR, ret);
+    return ret;
+  }
 #endif
 
 #ifdef CONFIG_FS_PROCFS
@@ -180,11 +180,11 @@ int stm32_bringup(void)
 
   ret = nx_mount(NULL, STM32_PROCFS_MOUNTPOINT, "procfs", 0, NULL);
   if (ret < 0)
-    {
-      ferr("ERROR: Failed to mount procfs at %s: %d\n",
-           STM32_PROCFS_MOUNTPOINT, ret);
-    }
+  {
+    ferr("ERROR: Failed to mount procfs at %s: %d\n",
+         STM32_PROCFS_MOUNTPOINT, ret);
+  }
 #endif
-
+  stm32_icm42688_initialize(0, 1);
   return ret;
 }

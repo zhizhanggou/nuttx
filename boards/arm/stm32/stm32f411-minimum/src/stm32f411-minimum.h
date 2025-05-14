@@ -50,7 +50,7 @@
  * - When the I/O is HIGH, the LED is off.
  */
 
-#define GPIO_LED1 \
+#define GPIO_LED1                                                          \
   (GPIO_PORTC | GPIO_PIN13 | GPIO_OUTPUT_SET | GPIO_OUTPUT | GPIO_PULLUP | \
    GPIO_SPEED_50MHz)
 
@@ -60,57 +60,57 @@
  * microcontroller.
  */
 
-#define MIN_IRQBUTTON   BUTTON_USER
-#define MAX_IRQBUTTON   BUTTON_EXTERNAL
-#define NUM_IRQBUTTONS  (BUTTON_USER - BUTTON_EXTERNAL + 1)
+#define MIN_IRQBUTTON BUTTON_USER
+#define MAX_IRQBUTTON BUTTON_EXTERNAL
+#define NUM_IRQBUTTONS (BUTTON_USER - BUTTON_EXTERNAL + 1)
 
 #define GPIO_BTN_USER \
-  (GPIO_INPUT |GPIO_PULLUP |GPIO_EXTI | GPIO_PORTA | GPIO_PIN0)
+  (GPIO_INPUT | GPIO_PULLUP | GPIO_EXTI | GPIO_PORTA | GPIO_PIN0)
 
 #define GPIO_BTN_EXTERNAL \
-  (GPIO_INPUT |GPIO_FLOAT |GPIO_EXTI | GPIO_PORTA | GPIO_PIN1)
+  (GPIO_INPUT | GPIO_FLOAT | GPIO_EXTI | GPIO_PORTA | GPIO_PIN1)
 
 /* PWM Configuration */
 
-#define STM32F411MINIMUM_PWMTIMER   3
+#define STM32F411MINIMUM_PWMTIMER 3
 #define STM32F411MINIMUM_PWMCHANNEL 3
 
 /* SPI chip selects */
 
-#define FLASH_SPI1_CS \
+#define FLASH_SPI1_CS                                                    \
   (GPIO_PORTA | GPIO_PIN4 | GPIO_OUTPUT_SET | GPIO_OUTPUT | GPIO_FLOAT | \
    GPIO_SPEED_50MHz)
 
 /* procfs File System */
 
 #ifdef CONFIG_FS_PROCFS
-#  ifdef CONFIG_NSH_PROC_MOUNTPOINT
-#    define STM32_PROCFS_MOUNTPOINT CONFIG_NSH_PROC_MOUNTPOINT
-#  else
-#    define STM32_PROCFS_MOUNTPOINT "/proc"
-#  endif
+#ifdef CONFIG_NSH_PROC_MOUNTPOINT
+#define STM32_PROCFS_MOUNTPOINT CONFIG_NSH_PROC_MOUNTPOINT
+#else
+#define STM32_PROCFS_MOUNTPOINT "/proc"
+#endif
 #endif
 
 /* HX711 pins */
 
 #ifdef CONFIG_ADC_HX711
-#  ifdef CONFIG_STM32F411MINIMUM_HX711_CLK_PORTB
-#    define HX711_CLK_PORT GPIO_PORTB
-#  else
-#    define HX711_CLK_PORT GPIO_PORTA
-#  endif
+#ifdef CONFIG_STM32F411MINIMUM_HX711_CLK_PORTB
+#define HX711_CLK_PORT GPIO_PORTB
+#else
+#define HX711_CLK_PORT GPIO_PORTA
+#endif
 
-#  ifdef CONFIG_STM32F411MINIMUM_HX711_DATA_PORTB
-#    define HX711_DATA_PORT GPIO_PORTB
-#  else
-#    define HX711_DATA_PORT GPIO_PORTA
-#  endif
+#ifdef CONFIG_STM32F411MINIMUM_HX711_DATA_PORTB
+#define HX711_DATA_PORT GPIO_PORTB
+#else
+#define HX711_DATA_PORT GPIO_PORTA
+#endif
 
-#define HX711_CLK_PIN  (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_OUTPUT_SET|\
-                        GPIO_SPEED_2MHz|GPIO_PULLUP|\
-                        HX711_CLK_PORT|CONFIG_STM32F411MINIMUM_HX711_CLK_PIN)
-#define HX711_DATA_PIN (GPIO_INPUT|GPIO_SPEED_2MHz|GPIO_PULLUP|GPIO_EXTI|\
-                        HX711_DATA_PORT|CONFIG_STM32F411MINIMUM_HX711_DATA_PIN)
+#define HX711_CLK_PIN (GPIO_OUTPUT | GPIO_PUSHPULL | GPIO_OUTPUT_SET | \
+                       GPIO_SPEED_2MHz | GPIO_PULLUP |                 \
+                       HX711_CLK_PORT | CONFIG_STM32F411MINIMUM_HX711_CLK_PIN)
+#define HX711_DATA_PIN (GPIO_INPUT | GPIO_SPEED_2MHz | GPIO_PULLUP | GPIO_EXTI | \
+                        HX711_DATA_PORT | CONFIG_STM32F411MINIMUM_HX711_DATA_PIN)
 
 #endif /* CONFIG_HX711 */
 
@@ -257,5 +257,7 @@ int stm32_rgbled_setup(void);
  ****************************************************************************/
 
 int stm32_bringup(void);
+
+int stm32_icm42688_initialize(int devno, int busno);
 
 #endif /* __BOARDS_ARM_STM32_STM32F411_MINIMUM_SRC_STM32F411_MINIMUM_H */
