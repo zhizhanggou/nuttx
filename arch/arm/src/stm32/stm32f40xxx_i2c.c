@@ -427,8 +427,8 @@ static struct stm32_i2c_priv_s stm32_i2c1_priv =
 #  endif
   /* TODO: ch for i2c 1 and 2 could be *X_2 based on stream priority */
 
-  .rxch       = DMAMAP_I2C1_RX,
-  .txch       = DMAMAP_I2C1_TX,
+  .rxch       = DMAMAP_I2C1_RX_1,
+  .txch       = DMAMAP_I2C1_TX_1,
 #endif
 };
 #endif
